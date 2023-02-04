@@ -38,8 +38,10 @@ func (hashTable *HashTable) Search(key interface{}) *BucketNode {
 	return hashTable.array[index].search(keyStr)
 }
 
-func (hahsTable *HashTable) Delete() {
-
+func (hashTable *HashTable) Delete(key interface{}) {
+	keyStr := fmt.Sprintf("%v", key)
+	index := hash(keyStr)
+	hashTable.array[index].delete(keyStr)
 }
 
 func (bucket *Bucket) insert(key string, value interface{}) {
@@ -61,6 +63,24 @@ func (bucket *Bucket) search(key string) *BucketNode {
 	return nil
 }
 
+func (bucket *Bucket) delete(key string) {
+	previousNode := bucket.head
+	currentNode := previousNode.next
+	if previousNode.key == key {
+		bucket.head = currentNode
+		return
+	}
+
+	for currentNode != nil {
+		if currentNode.key == key {
+			previousNode.next = currentNode.next
+			return
+		}
+		previousNode = currentNode
+		currentNode = currentNode.next
+	}
+}
+
 func hash(key string) int {
 	sum := 0
 	for _, v := range key {
@@ -73,7 +93,8 @@ func hash(key string) int {
 func main() {
 	testHashTable := Init()
 	testHashTable.Insert("hola", 111)
-	testHashTable.Insert("hola", 222)
-	testHashTable.Insert(1, "hola")
-	fmt.Println(testHashTable.Search(1))
+	testHashTable.Insert("trewef", 222)
+	fmt.Println(testHashTable.Search("hola"))
+	testHashTable.Delete("hola")
+	fmt.Println(testHashTable.Search("hola"))
 }
