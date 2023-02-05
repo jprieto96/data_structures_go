@@ -1,1 +1,1 @@
-# hash_map_implementation_go
+# DATA STRUCTURES IN GO
